@@ -1,0 +1,24 @@
+<div class="transition-overlay" 
+     [class.active]="isActive"
+     [ngStyle]="{
+       '--primary-color': primaryColor,
+       '--secondary-color': secondaryColor,
+       '--glow-color': glowColor
+     }">
+  
+  <!-- Backdrop blur/dim layer -->
+  <div class="backdrop-blur"></div>
+  
+  <!-- Color wash layer -->
+  <div class="color-wash"></div>
+  
+  <!-- Ghost/Phantom arrow (behind, fades slower) -->
+  <div class="arrow-container arrow-ghost">
+    <img src="assets/home_assets/swiper_arrows.webp" alt="" class="arrow-img" draggable="false">
+  </div>
+  
+  <!-- Main arrow -->
+  <div class="arrow-container arrow-main">
+    <img src="assets/home_assets/swiper_arrows.webp" alt="" class="arrow-img" draggable="false">
+  </div>
+</div>

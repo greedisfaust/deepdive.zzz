@@ -1,0 +1,135 @@
+<div class="gacha-page">
+  
+  <!-- Banner Header -->
+  <div class="banner-header">
+    <h1>SIGNAL SEARCH</h1>
+    <p class="banner-subtitle">Character Event Warp</p>
+  </div>
+
+  <!-- Main Gacha Area -->
+  <div class="gacha-container">
+    
+    <!-- Left Side: Pull Buttons & Stats -->
+    <div class="gacha-controls">
+      
+      <!-- Pity Counter -->
+      <div class="pity-display">
+        <div class="pity-card">
+          <div class="pity-label">Pity Counter</div>
+          <div class="pity-count">{{ pityCounter }} / {{ guaranteedSRank }}</div>
+          <div class="pity-rate">S-Rank Rate: {{ getSRankRate() }}</div>
+        </div>
+      </div>
+
+      <!-- Pull Buttons -->
+      <div class="pull-buttons">
+        <button 
+          class="pull-btn single-pull" 
+          (click)="doSinglePull()"
+          [disabled]="isAnimating">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 6v6l4 2"></path>
+          </svg>
+          <span class="btn-text">Signal Search x1</span>
+          <span class="btn-cost">Free</span>
+        </button>
+
+        <button 
+          class="pull-btn ten-pull" 
+          (click)="doTenPull()"
+          [disabled]="isAnimating">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          <span class="btn-text">Signal Search x10</span>
+          <span class="btn-cost">Free</span>
+        </button>
+      </div>
+
+      <!-- Statistics -->
+      <div class="statistics-panel">
+        <h3>Pull Statistics</h3>
+        <div class="stat-row">
+          <span class="stat-label">Total Pulls:</span>
+          <span class="stat-value">{{ totalPulls }}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">S-Rank Pulls:</span>
+          <span class="stat-value s-rank">{{ sRankPulls }}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">A-Rank Pulls:</span>
+          <span class="stat-value a-rank">{{ aRankPulls }}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">S-Rank Rate:</span>
+          <span class="stat-value">{{ totalPulls > 0 ? ((sRankPulls / totalPulls) * 100).toFixed(2) : 0 }}%</span>
+        </div>
+        
+        <button class="reset-btn" (click)="resetPity()">
+          Reset Progress
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Side: Pull History -->
+    <div class="pull-history">
+      <h3>Recent Pulls</h3>
+      <div class="history-grid">
+        <div 
+          *ngFor="let pull of pullHistory" 
+          class="history-item"
+          [class.s-rank]="pull.rarity === 'S'"
+          [class.a-rank]="pull.rarity === 'A'">
+          <div class="history-portrait">
+            <img [src]="'assets/agents_icons/' + pull.agent.icon + '.webp'" [alt]="pull.agent.name">
+          </div>
+          <div class="history-rank">
+            <img [src]="'assets/ui_icons/agent_rank_' + pull.rarity.toLowerCase() + '.webp'" [alt]="pull.rarity">
+          </div>
+          <div class="history-info">
+            <div class="history-name">{{ pull.agent.name }}</div>
+            <div class="history-pity">Pull #{{ pull.pityCount }}</div>
+          </div>
+        </div>
+        
+        <div *ngIf="pullHistory.length === 0" class="no-history">
+          <p>No pulls yet. Try your luck!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result Modal -->
+  <div class="result-modal" *ngIf="pulledAgent" (click)="closeResult()">
+    <div class="result-content" (click)="$event.stopPropagation()">
+      <button class="close-modal" (click)="closeResult()">&times;</button>
+      
+      <div class="result-card" [class.rank-s]="getPulledAgentRarity() === 's'" [class.rank-a]="getPulledAgentRarity() === 'a'">
+        <div class="result-banner">
+          <img [src]="'https://api.hakush.in/zzz/UI/' + pulledAgent.Icon + '.webp'" [alt]="pulledAgent.Name">
+        </div>
+        
+        <div class="result-info">
+          <div class="result-rarity">
+            <img [src]="'assets/ui_icons/agent_rank_' + getPulledAgentRarity() + '.webp'">
+          </div>
+          <h2 class="result-name">{{ pulledAgent.Name }}</h2>
+          <p class="result-quote">"New Agent Acquired!"</p>
+          <button class="continue-btn" (click)="closeResult()">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animation Overlay -->
+  <div class="pull-animation" *ngIf="isAnimating">
+    <div class="loading-spinner"></div>
+    <p>Searching Signal...</p>
+  </div>
+
+</div>

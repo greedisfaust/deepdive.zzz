@@ -1,0 +1,277 @@
+<div class="agent-detail-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <div class="loading-spinner"></div>
+    <span>Loading agent...</span>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error">
+    <span>{{ error }}</span>
+  </div>
+
+  <!-- Agent Content -->
+  <div *ngIf="agent && !loading" class="agent-content">
+    
+    <!-- ===== TOP SECTION ===== -->
+    <div class="top-section">
+      <div class="portrait-column">
+        <div class="portrait-container">
+          <img [src]="getImageUrl()" [alt]="agent.Name" class="agent-portrait">
+          <div class="portrait-overlay">
+            <h1 class="agent-name">{{ agent.Name }}</h1>
+            <div class="rarity-stars" [ngClass]="getRarityClass()">
+              <span *ngFor="let star of getRarityStars()">★</span>
+            </div>
+            <div class="element-badge">
+              <img [src]="getAttributeIcon()" [alt]="getElementType()">
+              <span>{{ getElementType() }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-column">
+        <div class="stats-panel">
+          <div class="stats-header">
+            <h2>Ascension Stats</h2>
+            <span class="stats-subtitle">ASCENSION STATS</span>
+          </div>
+          <div class="level-selector">
+            <button *ngFor="let level of levelDisplayValues; let i = index"
+                    class="level-btn"
+                    [class.active]="selectedLevelIndex === i"
+                    (click)="onLevelChange(i)">
+              {{ level }}
+            </button>
+          </div>
+          <div class="stats-table">
+            <div class="stat-row"><span class="stat-label">Rarity</span><span class="stat-value">{{ getRarityLabel() }}</span></div>
+            <div class="stat-row"><span class="stat-label">Specialty</span><span class="stat-value">{{ getWeaponType() }}</span></div>
+            <div class="stat-row"><span class="stat-label">Attack Type</span><span class="stat-value">{{ getHitType() }}</span></div>
+            <div class="stat-row"><span class="stat-label">Faction</span><span class="stat-value">{{ getCamp() }}</span></div>
+            <div class="stat-row highlight"><span class="stat-label">Base HP</span><span class="stat-value">{{ getStatHP() }}</span></div>
+            <div class="stat-row highlight"><span class="stat-label">Base ATK</span><span class="stat-value">{{ getStatATK() }}</span></div>
+            <div class="stat-row highlight"><span class="stat-label">Base DEF</span><span class="stat-value">{{ getStatDEF() }}</span></div>
+            <div class="stat-row"><span class="stat-label">Impact</span><span class="stat-value">{{ agent.Stats.BreakStun }}</span></div>
+            <div class="stat-row"><span class="stat-label">CRIT Rate</span><span class="stat-value">{{ getCritRate() }}%</span></div>
+            <div class="stat-row"><span class="stat-label">CRIT DMG</span><span class="stat-value">{{ getCritDamage() }}%</span></div>
+            <div class="stat-row"><span class="stat-label">Anomaly Mastery</span><span class="stat-value">{{ agent.Stats.ElementMystery }}</span></div>
+            <div class="stat-row"><span class="stat-label">Anomaly Proficiency</span><span class="stat-value">{{ agent.Stats.ElementAbnormalPower }}</span></div>
+            <div class="stat-row"><span class="stat-label">PEN Ratio</span><span class="stat-value">0%</span></div>
+            <div class="stat-row"><span class="stat-label">Energy Regen</span><span class="stat-value">{{ agent.Stats.SpRecover }}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SKILLS SECTION ===== -->
+    <div class="skills-section">
+      <div class="section-header">
+        <h2 class="section-title">Skills</h2>
+        <span class="section-subtitle">SKILLS</span>
+      </div>
+      
+      <!-- Skill Tabs Row - tabs and slider inline -->
+      <div class="skill-tabs-row">
+        <!-- Basic Tab -->
+        <button class="skill-tab" [class.active]="activeSkillTab === 'basic'" (click)="onSkillTabClick('basic')">
+          <img [src]="getSkillTabIcon('basic')" alt="Basic">
+          <span class="tab-label">Basic Attack</span>
+          <span class="tab-sublabel">BASIC</span>
+        </button>
+        <!-- Slider after Basic if active -->
+        <div class="inline-slider" *ngIf="activeSkillTab === 'basic' && showSkillSlider['basic']">
+          <span class="slider-label">LV.</span>
+          <input type="range" class="skill-slider" [min]="1" [max]="16" 
+                 [value]="skillLevels['basic']"
+                 (input)="onSkillLevelChange('basic', $any($event.target).value)">
+          <span class="slider-value">{{ skillLevels['basic'] }}</span>
+        </div>
+
+        <!-- Dodge Tab -->
+        <button class="skill-tab" [class.active]="activeSkillTab === 'dodge'" (click)="onSkillTabClick('dodge')">
+          <img [src]="getSkillTabIcon('dodge')" alt="Dodge">
+          <span class="tab-label">Dodge</span>
+          <span class="tab-sublabel">DODGE</span>
+        </button>
+        <!-- Slider after Dodge if active -->
+        <div class="inline-slider" *ngIf="activeSkillTab === 'dodge' && showSkillSlider['dodge']">
+          <span class="slider-label">LV.</span>
+          <input type="range" class="skill-slider" [min]="1" [max]="16" 
+                 [value]="skillLevels['dodge']"
+                 (input)="onSkillLevelChange('dodge', $any($event.target).value)">
+          <span class="slider-value">{{ skillLevels['dodge'] }}</span>
+        </div>
+
+        <!-- Special Tab -->
+        <button class="skill-tab" [class.active]="activeSkillTab === 'special'" (click)="onSkillTabClick('special')">
+          <img [src]="getSkillTabIcon('special')" alt="Special">
+          <span class="tab-label">Special Attack</span>
+          <span class="tab-sublabel">SPECIAL</span>
+        </button>
+        <!-- Slider after Special if active -->
+        <div class="inline-slider" *ngIf="activeSkillTab === 'special' && showSkillSlider['special']">
+          <span class="slider-label">LV.</span>
+          <input type="range" class="skill-slider" [min]="1" [max]="16" 
+                 [value]="skillLevels['special']"
+                 (input)="onSkillLevelChange('special', $any($event.target).value)">
+          <span class="slider-value">{{ skillLevels['special'] }}</span>
+        </div>
+
+        <!-- Chain Tab -->
+        <button class="skill-tab" [class.active]="activeSkillTab === 'chain'" (click)="onSkillTabClick('chain')">
+          <img [src]="getSkillTabIcon('chain')" alt="Chain">
+          <span class="tab-label">Chain Attack</span>
+          <span class="tab-sublabel">CHAIN</span>
+        </button>
+        <!-- Slider after Chain if active -->
+        <div class="inline-slider" *ngIf="activeSkillTab === 'chain' && showSkillSlider['chain']">
+          <span class="slider-label">LV.</span>
+          <input type="range" class="skill-slider" [min]="1" [max]="16" 
+                 [value]="skillLevels['chain']"
+                 (input)="onSkillLevelChange('chain', $any($event.target).value)">
+          <span class="slider-value">{{ skillLevels['chain'] }}</span>
+        </div>
+
+        <!-- Assist Tab -->
+        <button class="skill-tab" [class.active]="activeSkillTab === 'assist'" (click)="onSkillTabClick('assist')">
+          <img [src]="getSkillTabIcon('assist')" alt="Assist">
+          <span class="tab-label">Assist</span>
+          <span class="tab-sublabel">ASSIST</span>
+        </button>
+        <!-- Slider after Assist if active -->
+        <div class="inline-slider" *ngIf="activeSkillTab === 'assist' && showSkillSlider['assist']">
+          <span class="slider-label">LV.</span>
+          <input type="range" class="skill-slider" [min]="1" [max]="16" 
+                 [value]="skillLevels['assist']"
+                 (input)="onSkillLevelChange('assist', $any($event.target).value)">
+          <span class="slider-value">{{ skillLevels['assist'] }}</span>
+        </div>
+
+        <!-- Core Tab -->
+        <button class="skill-tab" [class.active]="activeSkillTab === 'core'" (click)="onSkillTabClick('core')">
+          <img [src]="getSkillTabIcon('core')" alt="Core">
+          <span class="tab-label">Core Skill</span>
+          <span class="tab-sublabel">CORE</span>
+        </button>
+        <!-- Core Level Buttons (A-F) after Core if active -->
+        <div class="inline-core-levels" *ngIf="activeSkillTab === 'core' && showSkillSlider['core']">
+          <button *ngFor="let label of coreLevelLabels; let i = index"
+                  class="core-level-btn"
+                  [class.active]="skillLevels['core'] === i"
+                  (click)="onSkillLevelChange('core', i)">
+            {{ label }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Skill Content -->
+      <div class="skill-content">
+        <!-- Basic Skills -->
+        <div *ngIf="activeSkillTab === 'basic'" class="skill-list">
+          <div class="skill-item" *ngFor="let skill of getBasicSkills()">
+            <div class="skill-header">
+              <img [src]="getSkillTabIcon('basic')" class="skill-icon" alt="Basic">
+              <h4 class="skill-name" [innerHTML]="parseDescription(skill.Name, 'basic')"></h4>
+            </div>
+            <p class="skill-desc" [innerHTML]="parseDescription(skill.Desc, 'basic')"></p>
+          </div>
+        </div>
+
+        <!-- Dodge Skills -->
+        <div *ngIf="activeSkillTab === 'dodge'" class="skill-list">
+          <div class="skill-item" *ngFor="let skill of getDodgeSkills()">
+            <div class="skill-header">
+              <img [src]="getSkillTabIcon('dodge')" class="skill-icon" alt="Dodge">
+              <h4 class="skill-name" [innerHTML]="parseDescription(skill.Name, 'dodge')"></h4>
+            </div>
+            <p class="skill-desc" [innerHTML]="parseDescription(skill.Desc, 'dodge')"></p>
+          </div>
+        </div>
+
+        <!-- Special Skills -->
+        <div *ngIf="activeSkillTab === 'special'" class="skill-list">
+          <div class="skill-item" *ngFor="let skill of getSpecialSkills()">
+            <div class="skill-header">
+              <img [src]="getSkillTabIcon('special')" class="skill-icon" alt="Special">
+              <h4 class="skill-name" [innerHTML]="parseDescription(skill.Name, 'special')"></h4>
+            </div>
+            <p class="skill-desc" [innerHTML]="parseDescription(skill.Desc, 'special')"></p>
+          </div>
+        </div>
+
+        <!-- Chain Skills -->
+        <div *ngIf="activeSkillTab === 'chain'" class="skill-list">
+          <div class="skill-item" *ngFor="let skill of getChainSkills()">
+            <div class="skill-header">
+              <img [src]="getSkillTabIcon('chain')" class="skill-icon" alt="Chain">
+              <h4 class="skill-name" [innerHTML]="parseDescription(skill.Name, 'chain')"></h4>
+            </div>
+            <p class="skill-desc" [innerHTML]="parseDescription(skill.Desc, 'chain')"></p>
+          </div>
+        </div>
+
+        <!-- Assist Skills -->
+        <div *ngIf="activeSkillTab === 'assist'" class="skill-list">
+          <div class="skill-item" *ngFor="let skill of getAssistSkills()">
+            <div class="skill-header">
+              <img [src]="getSkillTabIcon('assist')" class="skill-icon" alt="Assist">
+              <h4 class="skill-name" [innerHTML]="parseDescription(skill.Name, 'assist')"></h4>
+            </div>
+            <p class="skill-desc" [innerHTML]="parseDescription(skill.Desc, 'assist')"></p>
+          </div>
+        </div>
+
+        <!-- Core Skills -->
+        <div *ngIf="activeSkillTab === 'core'" class="skill-list">
+          <div class="skill-item" *ngIf="getCurrentCoreSkill()">
+            <div class="skill-header">
+              <img [src]="getSkillTabIcon('core')" class="skill-icon" alt="Core">
+              <h4 class="skill-name" [innerHTML]="parseDescription(getCurrentCoreSkill()!.Name, 'core')"></h4>
+            </div>
+            <p class="skill-desc" [innerHTML]="parseDescription(getCurrentCoreSkill()!.Desc, 'core')"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skill Attributes Section -->
+      <div class="skill-attributes-section" *ngIf="activeSkillTab !== 'core'">
+        <h4 class="attributes-title">Skill Attributes (Lv.{{ skillLevels[activeSkillTab] }})</h4>
+        <div *ngIf="getSkillMaterials(activeSkillTab).length > 0; else noMaterials">
+          <!-- Loop through each skill group -->
+          <div class="skill-group" *ngFor="let skillGroup of getSkillMaterials(activeSkillTab)">
+            <h5 class="skill-group-name">{{ skillGroup.skillName }}</h5>
+            <div class="attributes-grid">
+              <div class="attribute-item" *ngFor="let mat of skillGroup.multipliers">
+                <span class="attribute-name">{{ mat.name }}</span>
+                <span class="attribute-value">{{ getMultiplierValue(mat) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #noMaterials>
+          <p style="color: #666; font-size: 12px; text-align: center; padding: 20px;">No skill data available</p>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- ===== MINDSCAPE CINEMA ===== -->
+    <div class="mindscape-section">
+      <div class="section-header">
+        <h2 class="section-title">Mindscape Cinema</h2>
+        <span class="section-subtitle">MINDSCAPE CINEMA</span>
+      </div>
+      <div class="mindscape-grid">
+        <div class="mindscape-item" *ngFor="let talent of getTalents()">
+          <div class="mindscape-level">M{{ talent.level }}</div>
+          <div class="mindscape-content">
+            <h4 class="mindscape-name">{{ talent.Name }}</h4>
+            <p class="mindscape-desc" [innerHTML]="parseDescription(talent.Desc)"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

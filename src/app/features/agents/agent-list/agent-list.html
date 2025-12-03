@@ -1,0 +1,67 @@
+<div class="list-viewport">
+  
+  <!-- ===== AGENT PREVIEW PANEL ===== -->
+  <div class="agent-preview-panel" [class.visible]="hoveredAgent">
+    <div class="preview-content" *ngIf="previewAgent && !previewLoading">
+      <!-- Portrait with transparent background -->
+      <div class="preview-portrait-container">
+        <img [src]="getPreviewImageUrl()" [alt]="previewAgent.Name" class="preview-portrait">
+      </div>
+      
+      <!-- Info Card -->
+      <div class="preview-info-card">
+        <h2 class="preview-name">{{ previewAgent.Name }}</h2>
+        <div class="preview-rarity-stars" [ngClass]="getPreviewRarityClass()">
+          <span *ngFor="let star of getPreviewRarityStars()">★</span>
+        </div>
+        
+        <!-- All Badges Row: Element + Specialty + Faction -->
+        <div class="preview-badges-row">
+          <div class="preview-badge" *ngIf="getPreviewAttributeIcon()">
+            <img [src]="getPreviewAttributeIcon()" [alt]="getPreviewElementType()">
+            <span>{{ getPreviewElementType() }}</span>
+          </div>
+          <div class="preview-badge" *ngIf="getPreviewSpecialtyIcon()">
+            <img [src]="getPreviewSpecialtyIcon()" [alt]="getPreviewWeaponType()">
+            <span>{{ getPreviewWeaponType() }}</span>
+          </div>
+          <div class="preview-badge faction-badge" *ngIf="getPreviewCamp()">
+            <img *ngIf="getPreviewFactionIcon()" [src]="getPreviewFactionIcon()" [alt]="getPreviewCamp()">
+            <span>{{ getPreviewCamp() }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="preview-loading" *ngIf="previewLoading">
+      <div class="preview-spinner"></div>
+    </div>
+  </div>
+  
+  <!-- ========== bangboo ========== -->
+  <div class="gif-panel">
+    <div class="gif-container">
+      <video #scrollVideo [src]="scrollGifUrl" class="scroll-gif" muted playsinline></video>
+    </div>
+  </div>
+  <!-- ========== bangbooend ========== -->
+  
+  <!-- The Rotated Wrapper -->
+  <div class="tilt-wrapper"
+       (mousedown)="onMouseDown($event)"
+       (touchstart)="onTouchStart($event)">
+    <!-- The Moving Grid -->
+    <div class="grid-container" [style.transform]="getTransform()">
+      <app-agent-card 
+        *ngFor="let agent of displayAgents; trackBy: trackByIndex" 
+        [agent]="agent"
+        class="grid-item"
+        (click)="onAgentClick(agent)"
+        (mouseenter)="onAgentHover(agent)"
+        (mouseleave)="onAgentLeave()">
+      </app-agent-card>
+    </div>
+  </div>
+
+  <!-- Optional: Overlay gradients to hide edges smoothly -->
+  <div class="vignette-overlay"></div>
+</div>

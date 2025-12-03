@@ -1,0 +1,32 @@
+<div class="skewed-card" 
+     [class.rarity-s]="agent.rarity === 'S'"
+     [class.rarity-a]="agent.rarity === 'A'">
+  <div class="skewed-card-inner">
+    <!-- Added draggable="false" -->
+    <div class="skewed-card-image" 
+         [style.background-image]="'url(' + getImageUrl() + ')'">
+    </div>
+    
+    <!-- Top right icons -->
+    <div class="card-icons">
+      <div class="card-icon" title="Attribute">
+        <!-- Added draggable="false" -->
+        <img [src]="getAttributeIcon()" [alt]="agent.attribute" draggable="false">
+      </div>
+      <div class="card-icon" title="Specialty">
+        <!-- Added draggable="false" -->
+        <img [src]="getSpecialtyIcon()" [alt]="agent.specialty" draggable="false">
+      </div>
+    </div>
+    
+    <!-- Bottom info -->
+    <div class="card-info">
+      <span class="card-rank" 
+            [class.rank-s]="agent.rarity === 'S'"
+            [class.rank-a]="agent.rarity === 'A'">
+        <!-- Added draggable="false" -->
+        <img [src]="getRarityIcon()" [alt]="agent.rarity" draggable="false">
+      </span>
+    </div>
+  </div>
+</div>

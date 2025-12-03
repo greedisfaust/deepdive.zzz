@@ -1,0 +1,271 @@
+<div class="homepage-container">
+  
+  <!-- ===== LEFT COLUMN (65%) ===== -->
+  <div class="left-column">
+    
+    <!-- Navigation Buttons - Fixed at top -->
+    <div class="nav-buttons">
+      <a routerLink="/" class="nav-btn active">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9,22 9,12 15,12 15,22"></polyline>
+        </svg>
+        <span>HOME</span>
+      </a>
+      <a routerLink="/agents" class="nav-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <span>AGENTS</span>
+      </a>
+      <a routerLink="/calculator" class="nav-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+          <line x1="8" y1="6" x2="16" y2="6"></line>
+          <line x1="16" y1="14" x2="16" y2="18"></line>
+          <line x1="8" y1="14" x2="8" y2="14"></line>
+          <line x1="12" y1="14" x2="12" y2="14"></line>
+          <line x1="8" y1="18" x2="8" y2="18"></line>
+          <line x1="12" y1="18" x2="12" y2="18"></line>
+        </svg>
+        <span>CALCULATOR</span>
+      </a>
+    </div>
+
+    <!-- Carousel Container -->
+    <div class="carousel-wrapper">
+      <div class="carousel-track" [style.transform]="'translateX(-' + (currentSlide * 100) + '%)'">
+        
+        <!-- SLIDE 1: About Page -->
+        <div class="carousel-slide">
+          <div class="slide-content about-slide">
+            <div class="slide-header">
+              <span class="version-badge">DEEPDIVE</span>
+              <h2 class="slide-title">WELCOME TO DEEPDIVE.zzz</h2>
+            </div>
+            <h3 class="slide-subtitle">Your Zenless Zone Zero Companion</h3>
+            <!-- ABOUT_DESCRIPTION: Add your about text here -->
+            <p class="slide-description">
+              DEEPDIVE.zzz is your ultimate resource for Zenless Zone Zero. 
+              Browse agents, calculate materials, and optimize your gameplay.
+            </p>
+            <!-- ABOUT_FEATURES: Add feature highlights here -->
+            <div class="feature-list">
+              <div class="feature-item">
+                <img src="/assets/ui_icons/seed_interknoticon.webp" alt="Agent Database" class="feature-icon-img">
+                <span>Agent Database</span>
+              </div>
+              <div class="feature-item">
+                <img src="/assets/ui_icons/qingyi_interknoticon.webp" alt="Material Calculator" class="feature-icon-img">
+                <span>Material Calculator</span>
+              </div>
+              <div class="feature-item">
+                <img src="/assets/ui_icons/anby_interknoticon.webp" alt="Skill Breakdowns" class="feature-icon-img">
+                <span>Skill Breakdowns</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2: Event/Banner Showcase -->
+        <div class="carousel-slide">
+          <div class="slide-content event-slide">
+            <div class="event-layout">
+              <div class="event-image-container">
+                <!-- EVENT_IMAGE: Change this src for different events -->
+                <img src="assets/home_assets/vivianevent.webp" alt="Current Event" class="event-image">
+              </div>
+              <div class="event-info">
+                <span class="version-badge">VERSION 2.4</span>
+                <h2 class="slide-title">SPECIAL EVENT</h2>
+                <!-- EVENT_TITLE: Update event title here -->
+                <h3 class="event-name">Signal Search Thank-You Gift</h3>
+                <!-- EVENT_DESCRIPTION: Update event description here -->
+                <p class="slide-description">
+                  During the event, spend a specified amount of Encrypted 
+                  Master Tapes to get rewards such as Proxy accessories 
+                  and Vivian's Outfit Iris of the Shore!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3: Character Showcase (RANDOMIZED) -->
+        <div class="carousel-slide">
+          <div class="slide-content character-slide">
+            <div class="event-layout">
+              <div class="event-image-container">
+                <!-- Loading state -->
+                <div *ngIf="spotlightLoading" class="spotlight-loading">
+                  <span>Loading agent...</span>
+                </div>
+                <!-- Agent portrait - uses spotlight-image class for full body display -->
+                <img *ngIf="!spotlightLoading && spotlightAgent" 
+                     [src]="getSpotlightImageUrl()" 
+                     [alt]="getSpotlightName()" 
+                     class="spotlight-image">
+              </div>
+              <div class="event-info">
+                <span class="version-badge">FEATURED | {{ getSpotlightRarity() }}</span>
+                <h2 class="slide-title">AGENT SPOTLIGHT</h2>
+                <h3 class="event-name">{{ getSpotlightName() }}</h3>
+                <p class="slide-description">
+                  {{ getSpotlightDescription() }}
+                </p>
+                <a [routerLink]="['/agents', spotlightAgentIndex?.id]" class="slide-cta">View Agent →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 4: Calculator Promo -->
+        <div class="carousel-slide">
+          <div class="slide-content promo-slide">
+            <div class="slide-header">
+              <span class="version-badge">TOOL</span>
+              <h2 class="slide-title">MATERIAL CALCULATOR</h2>
+            </div>
+            <h3 class="slide-subtitle">Plan Your Agent Upgrades</h3>
+            <!-- CALCULATOR_DESCRIPTION: Update description here -->
+            <p class="slide-description">
+              Calculate exactly what materials you need to level up 
+              your agents. From ascension materials to core skill costs, 
+              plan your farming efficiently!
+            </p>
+            <a routerLink="/calculator" class="slide-cta">Open Calculator →</a>
+          </div>
+        </div>
+
+        <!-- ADD_MORE_SLIDES: Copy a slide above and paste here to add more -->
+
+      </div>
+
+      <!-- Carousel Navigation -->
+      <div class="carousel-nav">
+        <button class="carousel-arrow prev" (click)="prevSlide()" aria-label="Previous slide">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <div class="carousel-dots">
+          <button 
+            *ngFor="let slide of slides; let i = index" 
+            class="carousel-dot" 
+            [class.active]="currentSlide === i"
+            (click)="goToSlide(i)"
+            [attr.aria-label]="'Go to slide ' + (i + 1)">
+          </button>
+        </div>
+        <button class="carousel-arrow next" (click)="nextSlide()" aria-label="Next slide">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== RIGHT COLUMN (35%) ===== -->
+  <div class="right-column">
+    <div class="credits-container">
+      <div class="credits-header">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <h2>Credits & Thanks</h2>
+      </div>
+
+      <!-- DEVELOPERS SECTION -->
+      <div class="credits-section">
+        <h3 class="credits-section-title">Developers</h3>
+        <div class="credits-grid">
+          <!-- DEVELOPER_1: greedisfaust -->
+          <div class="credit-card">
+            <a href="https://www.youtube.com/@greedismymiddlename" target="_blank" rel="noopener" class="credit-avatar-link">
+              <div class="credit-avatar zoomed">
+                <img src="assets/home_assets/dev_miyabi.png" alt="greedisfaust avatar">
+              </div>
+            </a>
+            <div class="credit-info">
+              <span class="credit-name">greedisfaust</span>
+              <span class="credit-role">Developer 1</span>
+              <span class="credit-title">" Washed Up "</span>
+            </div>
+          </div>
+
+          <!-- DEVELOPER_2: eren -->
+          <div class="credit-card">
+            <a href="https://x.com/9801_ner" target="_blank" rel="noopener" class="credit-avatar-link">
+              <div class="credit-avatar">
+                <img src="assets/home_assets/dev_frieren.jpg" alt="eren avatar">
+              </div>
+            </a>
+            <div class="credit-info">
+              <span class="credit-name">eren</span>
+              <span class="credit-role">Developer 2</span>
+              <span class="credit-title">" Maimai Monster "</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESOURCES & CREDITS SECTION -->
+      <div class="credits-section">
+        <h3 class="credits-section-title">Resources & Attribution</h3>
+        <div class="resource-list">
+          <!-- RESOURCE: Angular -->
+          <div class="resource-item">
+            <div class="resource-name-wrapper">
+              <img src="assets/ui_icons/angularcli_icon.png" alt="Angular" class="resource-icon">
+              <span class="resource-name">Angular</span>
+            </div>
+            <span class="resource-desc">Application Framework</span>
+          </div>
+          <!-- RESOURCE: Hakush.in API -->
+          <div class="resource-item">
+            <div class="resource-name-wrapper">
+              <img src="assets/ui_icons/hakushin_icon.png" alt="Hakush.in" class="resource-icon">
+              <a href="https://hakush.in" target="_blank" rel="noopener" class="resource-link">hakush.in</a>
+            </div>
+            <span class="resource-desc">Game Data API</span>
+          </div>
+          <!-- RESOURCE: Enka Network -->
+          <div class="resource-item">
+            <div class="resource-name-wrapper">
+              <img src="assets/ui_icons/enkanetwork_icon.png" alt="Enka Network" class="resource-icon">
+              <a href="https://enka.network" target="_blank" rel="noopener" class="resource-link">enka.network</a>
+            </div>
+            <span class="resource-desc">SVG Icons & Stats</span>
+          </div>
+          <!-- RESOURCE: HoYoverse -->
+          <div class="resource-item">
+            <div class="resource-name-wrapper">
+              <img src="assets/ui_icons/zzz_icon.jpg" alt="HoYoverse" class="resource-icon">
+              <span class="resource-name">HoYoverse / miHoYo</span>
+            </div>
+            <span class="resource-desc">Zenless Zone Zero Assets</span>
+          </div>
+          <!-- ADD_MORE_RESOURCES: Add more resources as needed -->
+        </div>
+      </div>
+
+      <!-- THANKS MESSAGE -->
+      <div class="thanks-message">
+        <!-- THANKS_TEXT: Update thank you message here -->
+        <p>
+          This application is a project made for a submission in our APPLICATION DEVELOPMENT subject.  Thank you for using DEEPDIVE.zzz!
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+</div>

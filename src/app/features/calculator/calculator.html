@@ -1,0 +1,502 @@
+<div class="calculator-page">
+  
+  <!-- Agent Selector -->
+  <div class="agent-selector" *ngIf="!agent">
+    <div class="selector-header">
+      <h3>CHARACTERS</h3>
+      <span class="character-count">Showing {{ filteredAgentList.length }} Agents</span>
+    </div>
+    
+    <!-- Search and Filters -->
+    <div class="filters-container">
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="filterAgents()"
+          placeholder="Search characters..."
+          class="search-input">
+        <button *ngIf="searchTerm" (click)="clearSearch()" class="clear-search">×</button>
+      </div>
+      
+      <!-- Filter Buttons -->
+      <div class="filter-buttons">
+        <!-- All Filter -->
+        <button 
+          class="filter-btn filter-all"
+          [class.active]="!activeFilters.rarity && !activeFilters.specialty && !activeFilters.attribute"
+          (click)="clearAllFilters()">
+          <span class="filter-icon">✦</span>
+        </button>
+        
+        <!-- Rarity Filters -->
+        <button 
+          class="filter-btn filter-rarity"
+          [class.active]="activeFilters.rarity === 'S'"
+          (click)="toggleFilter('rarity', 'S')">
+          <span class="filter-icon">S</span>
+        </button>
+        
+        <button 
+          class="filter-btn filter-rarity filter-a"
+          [class.active]="activeFilters.rarity === 'A'"
+          (click)="toggleFilter('rarity', 'A')">
+          <span class="filter-icon">A</span>
+        </button>
+        
+        <!-- Attribute Filters -->
+        <button 
+          class="filter-btn filter-attribute"
+          [class.active]="activeFilters.attribute === 'physical'"
+          (click)="toggleFilter('attribute', 'physical')"
+          title="Physical">
+          <img src="assets/ui_icons/IconPhysical.webp" class="filter-icon-img">
+        </button>
+        
+        <button 
+          class="filter-btn filter-attribute"
+          [class.active]="activeFilters.attribute === 'electric'"
+          (click)="toggleFilter('attribute', 'electric')"
+          title="Electric">
+          <img src="assets/ui_icons/IconElectric.webp" class="filter-icon-img">
+        </button>
+        
+        <button 
+          class="filter-btn filter-attribute"
+          [class.active]="activeFilters.attribute === 'fire'"
+          (click)="toggleFilter('attribute', 'fire')"
+          title="Fire">
+          <img src="assets/ui_icons/IconFire.webp" class="filter-icon-img">
+        </button>
+        
+        <button 
+          class="filter-btn filter-attribute"
+          [class.active]="activeFilters.attribute === 'ice'"
+          (click)="toggleFilter('attribute', 'ice')"
+          title="Ice">
+          <img src="assets/ui_icons/IconIce.webp" class="filter-icon-img">
+        </button>
+        
+        <button 
+          class="filter-btn filter-attribute"
+          [class.active]="activeFilters.attribute === 'frost'"
+          (click)="toggleFilter('attribute', 'frost')"
+          title="Frost">
+          <img src="assets/ui_icons/IconFrost.webp" class="filter-icon-img">
+        </button>
+        
+        <button 
+          class="filter-btn filter-attribute"
+          [class.active]="activeFilters.attribute === 'ether'"
+          (click)="toggleFilter('attribute', 'ether')"
+          title="Ether">
+          <img src="assets/ui_icons/IconEther.webp" class="filter-icon-img">
+        </button>
+        
+        <button 
+          class="filter-btn filter-attribute"
+          [class.active]="activeFilters.attribute === 'auricink'"
+          (click)="toggleFilter('attribute', 'auricink')"
+          title="Auric Ink">
+          <img src="assets/ui_icons/IconAuricInk.webp" class="filter-icon-img">
+        </button>
+        
+        <!-- Specialty Filters -->
+        <button 
+          class="filter-btn filter-specialty"
+          [class.active]="activeFilters.specialty === 'Attack'"
+          (click)="toggleFilter('specialty', 'Attack')"
+          title="Attack">
+          <img src="assets/ui_icons/IconAttackType.webp" class="filter-icon-img">
+        </button>
+        
+        <button 
+          class="filter-btn filter-specialty"
+          [class.active]="activeFilters.specialty === 'Stun'"
+          (click)="toggleFilter('specialty', 'Stun')"
+          title="Stun">
+          <img src="assets/ui_icons/IconStun.webp" class="filter-icon-img">
+        </button>
+        
+        <button 
+          class="filter-btn filter-specialty"
+          [class.active]="activeFilters.specialty === 'Anomaly'"
+          (click)="toggleFilter('specialty', 'Anomaly')"
+          title="Anomaly">
+          <img src="assets/ui_icons/IconAnomaly.webp" class="filter-icon-img">
+        </button>
+        
+        <button 
+          class="filter-btn filter-specialty"
+          [class.active]="activeFilters.specialty === 'Support'"
+          (click)="toggleFilter('specialty', 'Support')"
+          title="Support">
+          <img src="assets/ui_icons/IconSupport.webp" class="filter-icon-img">
+        </button>
+        
+        <button 
+          class="filter-btn filter-specialty"
+          [class.active]="activeFilters.specialty === 'Defense'"
+          (click)="toggleFilter('specialty', 'Defense')"
+          title="Defense">
+          <img src="assets/ui_icons/IconDefense.webp" class="filter-icon-img">
+        </button>
+        
+        <button 
+          class="filter-btn filter-specialty"
+          [class.active]="activeFilters.specialty === 'Rupture'"
+          (click)="toggleFilter('specialty', 'Rupture')"
+          title="Rupture">
+          <img src="assets/ui_icons/IconRupture.webp" class="filter-icon-img">
+        </button>
+        
+        <!-- Reset Button -->
+        <button class="filter-btn filter-reset" (click)="clearAllFilters()" title="Reset Filters">
+          <span class="filter-icon">×</span>
+          <span class="reset-text">Reset</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Character Grid -->
+    <div class="agent-grid">
+      <div 
+        *ngFor="let agentItem of filteredAgentList"
+        (click)="loadAgent(agentItem.id)"
+        class="agent-card-select"
+        [class.rank-s]="agentItem.rarity === 'S'"
+        [class.rank-a]="agentItem.rarity === 'A'">
+        
+        <!-- Character Portrait -->
+        <div class="card-portrait">
+          <img [src]="'assets/agents_icons/' + agentItem.icon + '.webp'" [alt]="agentItem.name">
+        </div>
+        
+        <!-- Rank Badge -->
+        <div class="rank-badge-corner">
+          <img [src]="'assets/ui_icons/agent_rank_' + agentItem.rarity.toLowerCase() + '.webp'" [alt]="agentItem.rarity">
+        </div>
+        
+        <!-- Character Info Footer -->
+        <div class="card-footer">
+          <div class="card-icons">
+            <img [src]="'assets/ui_icons/Icon' + capitalizeFirst(agentItem.specialty) + '.webp'" 
+                 class="specialty-icon" 
+                 [alt]="agentItem.specialty"
+                 onerror="this.style.display='none'">
+            <img [src]="'assets/ui_icons/Icon' + capitalizeFirst(agentItem.attribute) + '.webp'" 
+                 class="attribute-icon" 
+                 [alt]="agentItem.attribute"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="card-name">{{ agentItem.name }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calculator Interface -->
+  <div *ngIf="agent" class="calculator-layout">
+    
+    <!-- LEFT: Character Card -->
+    <div class="character-card">
+      <div class="character-banner">
+        <img [src]="'https://api.hakush.in/zzz/UI/' + agent.Icon + '.webp'" [alt]="agent.Name">
+        
+        <!-- Rank Badge -->
+        <div class="rank-badge-corner">
+          <img [src]="'assets/ui_icons/agent_rank_' + getAgentRank().toLowerCase() + '.webp'" [alt]="getAgentRank()">
+        </div>
+      </div>
+      
+      <div class="character-info-footer">
+        <div class="character-rank-name">
+          <span class="character-name-text">{{ agent.Name }}</span>
+        </div>
+        <div class="character-type-icons">
+          <img [src]="'assets/ui_icons/Icon' + capitalizeFirst(getAgentSpecialty()) + '.webp'" 
+               class="type-icon" 
+               [alt]="getAgentSpecialty()"
+               onerror="this.style.display='none'">
+          <img [src]="'assets/ui_icons/Icon' + capitalizeFirst(getAgentAttribute()) + '.webp'" 
+               class="type-icon" 
+               [alt]="getAgentAttribute()"
+               onerror="this.style.display='none'">
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Materials Panel -->
+    <div class="materials-panel">
+      <h2 class="panel-title">Upgrade Materials</h2>
+
+      <!-- Tab Navigation -->
+      <div class="material-tabs">
+        <button class="tab-btn active">Upgrade Material Details</button>
+        <a [href]="getPrydwenUrl()" target="_blank" class="prydwen-link-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          View Guide on Prydwen
+        </a>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls-section">
+        <!-- Level Preset -->
+        <!-- Level Preset -->
+        <div class="control-row level-preset">
+          <label>Level Preset:</label>
+          <select [(ngModel)]="selectedPreset" class="custom-select">
+            <option *ngFor="let preset of levelPreset" [ngValue]="preset">
+              {{ preset.label }}
+            </option>
+          </select>
+        </div>
+        
+        <!-- Core Skill -->
+        <div class="control-row core-skill">
+          <label>
+            <img src="assets/ui_icons/core_skill.webp" class="skill-icon" alt="Core Skill">
+            Current Core:
+          </label>
+          <select [(ngModel)]="currentCoreSkill" class="custom-select">
+            <option *ngFor="let lvl of corelvls" [value]="lvl">Core {{ lvl }}</option>
+          </select>
+          
+          <label class="arrow">>></label>
+          
+          <select [(ngModel)]="targetCoreSkill" class="custom-select">
+            <option *ngFor="let lvl of corelvls" [value]="lvl">Core {{ lvl }}</option>
+          </select>
+        </div>
+
+        <!-- Basic Attack -->
+        <div class="control-row">
+          <label>
+            <img src="assets/ui_icons/basic_attack.webp" class="skill-icon" alt="Basic Attack">
+            Basic Attack:
+          </label>
+          <select [(ngModel)]="currentBasicLevel" class="custom-select">
+            <option *ngFor="let lvl of skillLevels" [value]="lvl">Lv {{ lvl }}</option>
+          </select>
+          
+          <label class="arrow">>></label>
+          <select [(ngModel)]="targetBasicLevel" class="custom-select">
+            <option *ngFor="let lvl of skillLevels" [value]="lvl">Lv {{ lvl }}</option>
+          </select>
+        </div>
+
+        <!-- Dodge -->
+        <div class="control-row">
+          <label>
+            <img src="assets/ui_icons/dodge.webp" class="skill-icon" alt="Dodge">
+            Dodge:
+          </label>
+          <select [(ngModel)]="currentDodgeLevel" class="custom-select">
+            <option *ngFor="let lvl of skillLevels" [value]="lvl">Lv {{ lvl }}</option>
+          </select>
+          
+          <label class="arrow">>></label>
+          <select [(ngModel)]="targetDodgeLevel" class="custom-select">
+            <option *ngFor="let lvl of skillLevels" [value]="lvl">Lv {{ lvl }}</option>
+          </select>
+        </div>
+
+        <!-- Special Attack -->
+        <div class="control-row">
+          <label>
+            <img src="assets/ui_icons/special_attack.webp" class="skill-icon" alt="Special Attack">
+            Special Attack:
+          </label>
+          <select [(ngModel)]="currentSpecialLevel" class="custom-select">
+            <option *ngFor="let lvl of skillLevels" [value]="lvl">Lv {{ lvl }}</option>
+          </select>
+          
+          <label class="arrow">>></label>
+          <select [(ngModel)]="targetSpecialLevel" class="custom-select">
+            <option *ngFor="let lvl of skillLevels" [value]="lvl">Lv {{ lvl }}</option>
+          </select>
+        </div>
+
+        <!-- Chain Attack -->
+        <div class="control-row">
+          <label>
+            <img src="assets/ui_icons/chain_attack.webp" class="skill-icon" alt="Chain Attack">
+            Chain Attack:
+          </label>
+          <select [(ngModel)]="currentChainLevel" class="custom-select">
+            <option *ngFor="let lvl of skillLevels" [value]="lvl">Lv {{ lvl }}</option>
+          </select>
+          
+          <label class="arrow">>></label>
+          <select [(ngModel)]="targetChainLevel" class="custom-select">
+            <option *ngFor="let lvl of skillLevels" [value]="lvl">Lv {{ lvl }}</option>
+          </select>
+        </div>
+
+        <!-- Assist -->
+        <div class="control-row">
+          <label>
+            <img src="assets/ui_icons/assist.webp" class="skill-icon" alt="Assist">
+            Assist:
+          </label>
+          <select [(ngModel)]="currentAssistLevel" class="custom-select">
+            <option *ngFor="let lvl of skillLevels" [value]="lvl">Lv {{ lvl }}</option>
+          </select>
+          
+          <label class="arrow">>></label>
+          <select [(ngModel)]="targetAssistLevel" class="custom-select">
+            <option *ngFor="let lvl of skillLevels" [value]="lvl">Lv {{ lvl }}</option>
+          </select>
+        </div>
+
+        <!-- Calculate Buttons -->
+        <div class="button-row">
+          <button (click)="calcMaterials()" class="calc-btn smart">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+            </svg>
+            Smart Calculation
+          </button>
+          <button (click)="clearAgent()" class="calc-btn change">Change Agent</button>
+        </div>
+      </div>
+
+      <!-- Material Icons Grid -->
+      <div class="materials-grid" *ngIf="calculated">
+        <div class="material-card" *ngFor="let mat of totmat | keyvalue">
+          <div class="material-count">{{ mat.value }}</div>
+          <div class="material-icon">
+            <img [src]="getMaterialIconUrl(mat.key)" 
+                 [alt]="getMaterialName(mat.key)"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="material-name">{{ mat.key }}</div>
+        </div>
+      </div>
+
+      <!-- Breakdown by Category -->
+      <div class="breakdown-section" *ngIf="calculated">
+        <h3>Material Breakdown</h3>
+        
+        <!-- Ascension -->
+        <div class="breakdown-category" *ngIf="breakdown.ascension && (breakdown.ascension | keyvalue).length > 0">
+          <h4>Ascension (Level Up)</h4>
+          <div class="breakdown-materials">
+            <div class="breakdown-item" *ngFor="let mat of breakdown.ascension | keyvalue">
+              <span class="material-quantity">{{ mat.value }}x</span>
+              <img [src]="getMaterialIconUrl($any(mat.key))" 
+                   [alt]="mat.key" class="breakdown-icon" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+
+        <!-- Core Skills -->
+        <div class="breakdown-category" *ngIf="breakdown.core && (breakdown.core | keyvalue).length > 0">
+          <h4>
+            <img src="assets/ui_icons/core_skill.webp" class="skill-icon" alt="Core Skill">
+            Core Skills
+          </h4>
+          <div class="breakdown-materials">
+            <div class="breakdown-item" *ngFor="let mat of breakdown.core | keyvalue">
+              <span class="material-quantity">{{ mat.value }}x</span>
+              <img [src]="getMaterialIconUrl($any(mat.key))" 
+                   [alt]="mat.key" class="breakdown-icon" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+
+        <!-- Basic Attack -->
+        <div class="breakdown-category" *ngIf="breakdown.basic && (breakdown.basic | keyvalue).length > 0">
+          <h4>
+            <img src="assets/ui_icons/basic_attack.webp" class="skill-icon" alt="Basic Attack">
+            Basic Attack
+          </h4>
+          <div class="breakdown-materials">
+            <div class="breakdown-item" *ngFor="let mat of breakdown.basic | keyvalue">
+              <span class="material-quantity">{{ mat.value }}x</span>
+              <img [src]="getMaterialIconUrl($any(mat.key))" 
+                   [alt]="mat.key" class="breakdown-icon" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+
+        <!-- Dodge -->
+        <div class="breakdown-category" *ngIf="breakdown.dodge && (breakdown.dodge | keyvalue).length > 0">
+          <h4>
+            <img src="assets/ui_icons/dodge.webp" class="skill-icon" alt="Dodge">
+            Dodge
+          </h4>
+          <div class="breakdown-materials">
+            <div class="breakdown-item" *ngFor="let mat of breakdown.dodge | keyvalue">
+              <span class="material-quantity">{{ mat.value }}x</span>
+              <img [src]="getMaterialIconUrl($any(mat.key))" 
+                   [alt]="mat.key" class="breakdown-icon" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+
+        <!-- Special Attack -->
+        <div class="breakdown-category" *ngIf="breakdown.special && (breakdown.special | keyvalue).length > 0">
+          <h4>
+            <img src="assets/ui_icons/special_attack.webp" class="skill-icon" alt="Special Attack">
+            Special Attack
+          </h4>
+          <div class="breakdown-materials">
+            <div class="breakdown-item" *ngFor="let mat of breakdown.special | keyvalue">
+              <span class="material-quantity">{{ mat.value }}x</span>
+              <img [src]="getMaterialIconUrl($any(mat.key))" 
+                   [alt]="mat.key" class="breakdown-icon" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+
+        <!-- Chain Attack -->
+        <div class="breakdown-category" *ngIf="breakdown.chain && (breakdown.chain | keyvalue).length > 0">
+          <h4>
+            <img src="assets/ui_icons/chain_attack.webp" class="skill-icon" alt="Chain Attack">
+            Chain Attack
+          </h4>
+          <div class="breakdown-materials">
+            <div class="breakdown-item" *ngFor="let mat of breakdown.chain | keyvalue">
+              <span class="material-quantity">{{ mat.value }}x</span>
+              <img [src]="getMaterialIconUrl($any(mat.key))" 
+                   [alt]="mat.key" class="breakdown-icon" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+
+        <!-- Assist -->
+        <div class="breakdown-category" *ngIf="breakdown.assist && (breakdown.assist | keyvalue).length > 0">
+          <h4>
+            <img src="assets/ui_icons/assist.webp" class="skill-icon" alt="Assist">
+            Assist
+          </h4>
+          <div class="breakdown-materials">
+            <div class="breakdown-item" *ngFor="let mat of breakdown.assist | keyvalue">
+              <span class="material-quantity">{{ mat.value }}x</span>
+              <img [src]="getMaterialIconUrl($any(mat.key))" 
+                   [alt]="mat.key" class="breakdown-icon" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXP Needed -->
+      <div class="exp-section" *ngIf="calculated && expneeded > 0">
+        <h4>Total EXP Needed: <span class="exp-value">{{ expneeded | number }}</span></h4>
+      </div>
+
+      <!-- Footer Note -->
+      <div class="materials-footer">
+        <p>Required materials and those in storage are calculated based on crafting to the highest rarity</p>
+        <a href="#" class="rules-link">Upgrade Material Calculation Rules</a>
+      </div>
+    </div>
+
+  </div>
+</div>

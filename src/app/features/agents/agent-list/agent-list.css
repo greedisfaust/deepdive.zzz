@@ -1,0 +1,282 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  background-color: transparent;
+  overflow: hidden; 
+  position: fixed; 
+  top: 0;
+  left: 0;
+  z-index: 10; 
+  pointer-events: none;
+}
+
+.list-viewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px; 
+  pointer-events: none;
+  position: relative;
+}
+
+/* ===== AGENT PREVIEW PANEL ===== */
+.agent-preview-panel {
+  position: fixed;
+  left: 34%;
+  top: 54%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 420px;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.agent-preview-panel.visible {
+  opacity: 1;
+}
+
+.preview-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-portrait-container {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  overflow: hidden;
+  background: transparent;
+}
+
+.preview-portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.7));
+}
+
+/* Info Card - Separate from portrait */
+.preview-info-card {
+  background: rgba(20, 22, 30, 0.92);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 16px;
+  width: 100%;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  margin-top: -35px;
+  position: relative;
+  z-index: 2;
+}
+
+.preview-name {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
+  color: #fff;
+  font-family: 'ChineseShit', sans-serif;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9);
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.preview-rarity-stars {
+  font-size: 16px;
+  letter-spacing: 4px;
+  margin: 4px 0 10px 0;
+  text-align: center;
+}
+
+.preview-rarity-stars.rarity-s {
+  color: #ffd700;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 25px rgba(255, 215, 0, 0.5);
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+}
+
+.preview-rarity-stars.rarity-a {
+  color: #c678dd;
+  text-shadow: 0 0 15px rgba(198, 120, 221, 0.8), 0 0 25px rgba(198, 120, 221, 0.5);
+  filter: drop-shadow(0 0 8px rgba(198, 120, 221, 0.6));
+}
+
+/* Badges Row - Element + Specialty + Faction all in one row */
+.preview-badges-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.preview-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.preview-badge img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.preview-badge span {
+  font-size: 11px;
+  color: #fff;
+  font-weight: 500;
+  font-family: 'ChineseShit', sans-serif;
+  white-space: nowrap;
+}
+
+/* Faction badge - slightly different styling */
+.preview-badge.faction-badge {
+  background: rgba(255, 107, 53, 0.15);
+  border-color: rgba(255, 107, 53, 0.3);
+}
+
+.preview-badge.faction-badge span {
+  color: #ffb088;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Remove the old hidden faction - it's now in badges row */
+.preview-faction {
+  display: none;
+}
+
+.preview-loading {
+  background: rgba(20, 22, 30, 0.85);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  height: 580px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.preview-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 107, 53, 0.2);
+  border-top-color: #ff6b35;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ========== bangboo ========== */
+.gif-panel {
+  position: fixed;
+  left: 20px;
+  top: 80px;
+  width: 200px;
+  height: calc(100vh - 100px);
+  z-index: 15;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gif-container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-gif {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.8));
+  border-radius: 12px;
+}
+/* ========== bangboo ========== */
+
+/* The wrapper that provides the diagonal tilt */
+.tilt-wrapper {
+  transform: rotate(-12deg);
+  height: 150vh; 
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
+  padding-top: 30vh;
+  margin-left: 38vw;
+  pointer-events: auto; 
+  cursor: grab;
+  touch-action: none;
+}
+
+.tilt-wrapper:active {
+  cursor: grabbing;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 140px); 
+  grid-auto-rows: 180px;
+  gap: 10px; 
+  padding: 0;
+  will-change: transform;
+}
+
+.grid-item {
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Vignette to fade out top/bottom edges */
+.vignette-overlay {
+  display: none;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .agent-preview-panel {
+    left: 28%;
+    width: 360px;
+  }
+  
+  .preview-portrait-container {
+    height: 420px;
+  }
+  
+  .preview-name {
+    font-size: 24px;
+  }
+  
+  .preview-badge span {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 900px) {
+  .agent-preview-panel {
+    display: none;
+  }
+}
