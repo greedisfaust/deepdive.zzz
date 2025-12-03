@@ -47,14 +47,14 @@ export class AgentDetail implements OnInit {
 
   // Icon mapping
   private iconMap: { [key: string]: string } = {
-    'Icon_Normal': '/assets/ui_icons/basic_attack.webp',
-    'Icon_Special': '/assets/ui_icons/special_attacknormal.webp',
-    'Icon_SpecialReady': '/assets/ui_icons/special_attack.webp',
-    'Icon_Evade': '/assets/ui_icons/dodge.webp',
-    'Icon_QTE': '/assets/ui_icons/chain_attack.webp',
-    'Icon_UltimateReady': '/assets/ui_icons/chain_attack.webp',
-    'Icon_Switch': '/assets/ui_icons/assist.webp',
-    'Icon_CoreSkill': '/assets/ui_icons/core_skill.webp'
+    'Icon_Normal': 'assets/ui_icons/basic_attack.webp',
+    'Icon_Special': 'assets/ui_icons/special_attacknormal.webp',
+    'Icon_SpecialReady': 'assets/ui_icons/special_attack.webp',
+    'Icon_Evade': 'assets/ui_icons/dodge.webp',
+    'Icon_QTE': 'assets/ui_icons/chain_attack.webp',
+    'Icon_UltimateReady': 'assets/ui_icons/chain_attack.webp',
+    'Icon_Switch': 'assets/ui_icons/assist.webp',
+    'Icon_CoreSkill': 'assets/ui_icons/core_skill.webp'
   };
 
   constructor(
@@ -133,12 +133,12 @@ export class AgentDetail implements OnInit {
   getAttributeIcon(): string {
     const element = this.getElementType().toLowerCase();
     const icons: { [key: string]: string } = {
-      'electric': '/assets/ui_icons/IconElectric.webp',
-      'fire': '/assets/ui_icons/IconFire.webp',
-      'ice': '/assets/ui_icons/IconIce.webp',
-      'physical': '/assets/ui_icons/IconPhysical.webp',
-      'ether': '/assets/ui_icons/IconEther.webp',
-      'frost': '/assets/ui_icons/IconFrost.webp'
+      'electric': 'assets/ui_icons/IconElectric.webp',
+      'fire': 'assets/ui_icons/IconFire.webp',
+      'ice': 'assets/ui_icons/IconIce.webp',
+      'physical': 'assets/ui_icons/IconPhysical.webp',
+      'ether': 'assets/ui_icons/IconEther.webp',
+      'frost': 'assets/ui_icons/IconFrost.webp'
     };
     return icons[element] || '';
   }
@@ -447,12 +447,12 @@ export class AgentDetail implements OnInit {
 
   getSkillTabIcon(tab: string): string {
     const icons: { [key: string]: string } = {
-      'basic': '/assets/ui_icons/basic_attack.webp',
-      'dodge': '/assets/ui_icons/dodge.webp',
-      'special': '/assets/ui_icons/special_attack.webp',
-      'chain': '/assets/ui_icons/chain_attack.webp',
-      'assist': '/assets/ui_icons/assist.webp',
-      'core': '/assets/ui_icons/core_skill.webp'
+      'basic': 'assets/ui_icons/basic_attack.webp',
+      'dodge': 'assets/ui_icons/dodge.webp',
+      'special': 'assets/ui_icons/special_attack.webp',
+      'chain': 'assets/ui_icons/chain_attack.webp',
+      'assist': 'assets/ui_icons/assist.webp',
+      'core': 'assets/ui_icons/core_skill.webp'
     };
     return icons[tab] || '';
   }

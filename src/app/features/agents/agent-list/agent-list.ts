@@ -149,13 +149,13 @@ export class AgentList implements OnInit, OnDestroy {
   getPreviewAttributeIcon(): string {
     const element = this.getPreviewElementType().toLowerCase();
     const icons: { [key: string]: string } = {
-      'electric': '/assets/ui_icons/IconElectric.webp',
-      'fire': '/assets/ui_icons/IconFire.webp',
-      'ice': '/assets/ui_icons/IconIce.webp',
-      'physical': '/assets/ui_icons/IconPhysical.webp',
-      'ether': '/assets/ui_icons/IconEther.webp',
-      'auricink': '/assets/ui_icons/IconAuricInk.webp',
-      'frost': '/assets/ui_icons/IconFrost.webp'
+      'electric': 'assets/ui_icons/IconElectric.webp',
+      'fire': 'assets/ui_icons/IconFire.webp',
+      'ice': 'assets/ui_icons/IconIce.webp',
+      'physical': 'assets/ui_icons/IconPhysical.webp',
+      'ether': 'assets/ui_icons/IconEther.webp',
+      'auricink': 'assets/ui_icons/IconAuricInk.webp',
+      'frost': 'assets/ui_icons/IconFrost.webp'
     };
     return icons[element] || '';
   }
@@ -163,12 +163,12 @@ export class AgentList implements OnInit, OnDestroy {
   getPreviewSpecialtyIcon(): string {
     const specialty = this.getPreviewWeaponType().toLowerCase();
     const icons: { [key: string]: string } = {
-      'stun': '/assets/ui_icons/IconStun.webp',
-      'attack': '/assets/ui_icons/IconAttackType.webp',
-      'anomaly': '/assets/ui_icons/IconAnomaly.webp',
-      'support': '/assets/ui_icons/IconSupport.webp',
-      'rupture': '/assets/ui_icons/IconRupture.webp',
-      'defense': '/assets/ui_icons/IconDefense.webp'
+      'stun': 'assets/ui_icons/IconStun.webp',
+      'attack': 'assets/ui_icons/IconAttackType.webp',
+      'anomaly': 'assets/ui_icons/IconAnomaly.webp',
+      'support': 'assets/ui_icons/IconSupport.webp',
+      'rupture': 'assets/ui_icons/IconRupture.webp',
+      'defense': 'assets/ui_icons/IconDefense.webp'
     };
     return icons[specialty] || '';
   }
@@ -177,17 +177,17 @@ export class AgentList implements OnInit, OnDestroy {
     const camp = this.getPreviewCamp();
     
     const icons: { [key: string]: string } = {
-      'Cunning Hares': '/assets/ui_icons/IconCampGentleHouse.webp',
-      'Victoria Housekeeping Co.': '/assets/ui_icons/IconCampVictoriaHousekeepingCo..webp',
-      'Belobog Heavy Industries': '/assets/ui_icons/IconCampBelobogIndustries.webp',
-      'Sons of Calydon': '/assets/ui_icons/IconCampSonsOfCalydon.webp',
-      'Obol Squad': '/assets/ui_icons/IconCampObols.webp',
-      'Criminal Investigation Special Response Team': '/assets/ui_icons/IconCampN.E.P.S..webp',
-      'Section 6': '/assets/ui_icons/IconCampH.S.O-S6.webp',
-      'Stars of Lyra': '/assets/ui_icons/IconCampStarsOfLyra.webp',
-      'Mockingbird': '/assets/ui_icons/IconCampBlackRoot.webp',
-      'Yunkui Summit': '/assets/ui_icons/IconCampSuibian.webp',
-      'Spook Shack': '/assets/ui_icons/IconCampSpookShack.webp'
+      'Cunning Hares': 'assets/ui_icons/IconCampGentleHouse.webp',
+      'Victoria Housekeeping Co.': 'assets/ui_icons/IconCampVictoriaHousekeepingCo..webp',
+      'Belobog Heavy Industries': 'assets/ui_icons/IconCampBelobogIndustries.webp',
+      'Sons of Calydon': 'assets/ui_icons/IconCampSonsOfCalydon.webp',
+      'Obol Squad': 'assets/ui_icons/IconCampObols.webp',
+      'Criminal Investigation Special Response Team': 'assets/ui_icons/IconCampN.E.P.S..webp',
+      'Section 6': 'assets/ui_icons/IconCampH.S.O-S6.webp',
+      'Stars of Lyra': 'assets/ui_icons/IconCampStarsOfLyra.webp',
+      'Mockingbird': 'assets/ui_icons/IconCampBlackRoot.webp',
+      'Yunkui Summit': 'assets/ui_icons/IconCampSuibian.webp',
+      'Spook Shack': 'assets/ui_icons/IconCampSpookShack.webp'
     };
     
     return icons[camp] || '';
